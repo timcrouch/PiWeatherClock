@@ -1,0 +1,31 @@
+# WeatherClock Pi Configuration File
+# Copy this file to ~/.config/weatherclock/config.yaml and customize
+
+# Location settings
+# You can specify coordinates manually or leave as null for auto-detection
+location:
+  latitude: null   # e.g., 40.7128 for New York City
+  longitude: null  # e.g., -74.0060 for New York City
+  name: ""         # Display name, e.g., "New York, NY"
+
+# Display settings
+display:
+  # Temperature unit: "fahrenheit" or "celsius"
+  temperature_unit: "fahrenheit"
+  
+  # Time format: "12h" or "24h"
+  time_format: "12h"
+  
+  # Show seconds in time display
+  show_seconds: true
+  
+  # Theme: "dark" or "light"
+  theme: "dark"
+
+# Refresh settings
+refresh:
+  # Weather data refresh interval in seconds (minimum 300 = 5 minutes)
+  weather_interval: 900  # 15 minutes
+  
+  # Seconds before forecast view auto-returns to main view
+  forecast_timeout: 30
