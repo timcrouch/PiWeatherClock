@@ -1,12 +1,12 @@
 # WeatherClock Pi Configuration File
 # Copy this file to ~/.config/weatherclock/config.yaml and customize
 
-# Location settings
+# Location settings for weather data
 # You can specify coordinates manually or leave as null for auto-detection
 location:
-  latitude: null   # e.g., 40.7128 for New York City
-  longitude: null  # e.g., -74.0060 for New York City
-  name: ""         # Display name, e.g., "New York, NY"
+  latitude: 40.7128   # e.g., 40.7128 for New York City
+  longitude: -74.0060 # e.g., -74.0060 for New York City
+  name: "New York, NY"         # Display name for weather location
 
 # Display settings
 display:
@@ -16,7 +16,7 @@ display:
   # Time format: "12h" or "24h"
   time_format: "12h"
   
-  # Show seconds in time display
+  # Show seconds in main clock display
   show_seconds: true
   
   # Theme: "dark" or "light"
@@ -29,3 +29,24 @@ refresh:
   
   # Seconds before forecast view auto-returns to main view
   forecast_timeout: 30
+
+# Timezone configuration for the 3 clocks
+# Use IANA timezone names (e.g., "America/New_York", "Europe/London")
+timezones:
+  # Main clock (large, left side)
+  main:
+    timezone: "America/New_York"
+    label: "New York"
+    country: "USA"
+  
+  # Secondary clock 1 (top-right card)
+  secondary_1:
+    timezone: "Europe/London"
+    label: "London"
+    country: "UK"
+  
+  # Secondary clock 2 (bottom-right card)
+  secondary_2:
+    timezone: "Asia/Tokyo"
+    label: "Tokyo"
+    country: "Japan"

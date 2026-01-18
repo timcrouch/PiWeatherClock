@@ -14,6 +14,7 @@ from services.location import LocationService
 from utils.config import AppConfig, load_config
 from gui.main_view import MainView
 from gui.forecast_view import ForecastView
+from gui.settings_dialog import SettingsDialog
 
 
 logger = logging.getLogger(__name__)
@@ -55,8 +56,8 @@ class WeatherClockApp:
         if fullscreen:
             self.root.attributes('-fullscreen', True)
         else:
-            # Development mode: windowed
-            self.root.geometry("1024x600")
+            # Development mode: windowed at 800x480 (Pi display size)
+            self.root.geometry("800x480")
         
         # Hide cursor for kiosk mode
         if hide_cursor:
@@ -80,14 +81,18 @@ class WeatherClockApp:
         self.view_container = tk.Frame(self.root, bg=self.colors.background)
         self.view_container.pack(fill=tk.BOTH, expand=True)
         
-        # Main view
+        # Main view with multi-timezone clocks
         self.main_view = MainView(
             self.view_container,
             self.colors,
+            main_timezone=self.config.main_timezone,
+            secondary_timezone_1=self.config.secondary_timezone_1,
+            secondary_timezone_2=self.config.secondary_timezone_2,
             time_format=self.config.display.time_format,
             show_seconds=self.config.display.show_seconds,
             temperature_unit=self.config.display.temperature_unit,
-            on_temp_tap=self._show_forecast
+            on_temp_tap=self._show_forecast,
+            on_settings_tap=self._show_settings
         )
         
         # Forecast view
@@ -121,12 +126,35 @@ class WeatherClockApp:
         else:
             logger.warning("No forecast data available to display")
     
+    def _show_settings(self):
+        """Open the settings dialog."""
+        logger.info("Opening settings dialog")
+        
+        SettingsDialog(
+            self.root,
+            self.colors,
+            self.config,
+            on_save=self._on_settings_save
+        )
+    
+    def _on_settings_save(self, updated_config: AppConfig):
+        """Handle settings save - update the clock displays."""
+        logger.info("Settings saved, updating clocks")
+        self.config = updated_config
+        
+        # Update main view with new timezones
+        self.main_view.update_timezones(
+            self.config.main_timezone,
+            self.config.secondary_timezone_1,
+            self.config.secondary_timezone_2
+        )
+    
     def _handle_escape(self, event):
         """Handle escape key press."""
         if self.root.attributes('-fullscreen'):
             # Exit fullscreen
             self.root.attributes('-fullscreen', False)
-            self.root.geometry("1024x600")
+            self.root.geometry("800x480")
         else:
             # In windowed mode, exit application
             self.stop()
